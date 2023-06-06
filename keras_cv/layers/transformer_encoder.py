@@ -89,6 +89,8 @@ class TransformerEncoder(layers.Layer):
         self.dense1 = layers.Dense(self.mlp_units[0])
         self.dense2 = layers.Dense(self.mlp_units[1])
 
+        self.attention_scores = None
+
     def call(self, inputs):
         """Calls the Transformer Encoder on an input sequence.
         Args:
@@ -106,7 +108,7 @@ class TransformerEncoder(layers.Layer):
             )
 
         x = self.layer_norm1(inputs)
-        x = self.attn(x, x)
+        x, self.attention_scores = self.attn(x, x, return_attention_scores=True)
         x = layers.Dropout(self.mlp_dropout)(x)
         x = layers.Add()([x, inputs])
 
