@@ -19,7 +19,7 @@ def parse_weights(weights, include_top, model_type):
         return weights
     if weights.startswith("gs://"):
         weights = weights.replace("gs://", "https://storage.googleapis.com/")
-        return data_utils.get_file(
+        return utils.get_file(
             origin=weights,
             cache_subdir="models",
         )
@@ -30,7 +30,7 @@ def parse_weights(weights, include_top, model_type):
     if weights in WEIGHTS_CONFIG[model_type]:
         if not include_top:
             weights = weights + "-notop"
-        return data_utils.get_file(
+        return utils.get_file(
             origin=f"{BASE_PATH}/{model_type}/{weights}.h5",
             cache_subdir="models",
             file_hash=WEIGHTS_CONFIG[model_type][weights],
